@@ -1,0 +1,49 @@
+diff --git a/node_modules/v-calendar/src/utils/locale.js b/node_modules/v-calendar/src/utils/locale.js
+index 0776ec7..2930fb1 100644
+--- a/node_modules/v-calendar/src/utils/locale.js
++++ b/node_modules/v-calendar/src/utils/locale.js
+@@ -39,7 +39,7 @@ const fourDigits = /\d{4}/;
+ const word =
+   /[0-9]*['a-z\u00A0-\u05FF\u0700-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+|[\u0600-\u06FF/]+(\s*?[\u0600-\u06FF]+){1,2}/i;
+ const literal = /\[([^]*?)\]/gm;
+-const noop = () => {};
++const noop = () => { };
+ const monthUpdate = arrName => (d, v, l) => {
+   const index = l[arrName].indexOf(
+     v.charAt(0).toUpperCase() + v.substr(1).toLowerCase(),
+@@ -309,24 +309,28 @@ export function resolveConfig(config, locales) {
+   const defLocale = { ...locales['en-IE'], ...locales[id], id };
+   // Assign or merge defaults with provided config
+   config = isObject(config) ? defaultsDeep(config, defLocale) : defLocale;
++  // Set default mask if not provided with custom option
++  if (!config.masks.L) {
++    config.masks.L = 'MM/DD/YYYY';
++  }
+   // Return resolved config
+   return config;
+ }
+ 
+ export default class Locale {
+   constructor(config, { locales = defaultLocales, timezone } = {}) {
+-    const { id, firstDayOfWeek, masks } = resolveConfig(config, locales);
++    const { id, firstDayOfWeek, masks, translations } = resolveConfig(config, locales);
+     this.id = id;
+     this.daysInWeek = daysInWeek;
+     this.firstDayOfWeek = clamp(firstDayOfWeek, 1, daysInWeek);
+     this.masks = masks;
+     this.timezone = timezone || undefined;
+-    this.dayNames = this.getDayNames('long');
+-    this.dayNamesShort = this.getDayNames('short');
+-    this.dayNamesShorter = this.dayNamesShort.map(s => s.substring(0, 2));
+-    this.dayNamesNarrow = this.getDayNames('narrow');
+-    this.monthNames = this.getMonthNames('long');
+-    this.monthNamesShort = this.getMonthNames('short');
++    this.dayNames = translations?.dayNames || this.getDayNames('long');
++    this.dayNamesShort = translations?.dayNamesShort || this.getDayNames('short');
++    this.dayNamesShorter = translations?.dayNamesShorter || this.dayNamesShort.map(s => s.substring(0, 2));
++    this.dayNamesNarrow = translations?.dayNamesNarrow || this.getDayNames('narrow');
++    this.monthNames = translations?.monthNames || this.getMonthNames('long');
++    this.monthNamesShort = translations?.monthNamesShort || this.getMonthNames('short');
+     this.amPm = ['am', 'pm'];
+     this.monthData = {};
+     // Bind methods

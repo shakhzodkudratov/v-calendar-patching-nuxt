@@ -6,14 +6,20 @@
     "dev": "nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
-    "generate": "nuxt generate"
+    "generate": "nuxt generate",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "core-js": "^3.25.3",
     "nuxt": "^2.15.8",
+    "patch-package": "^8.0.0",
+    "postinstall-postinstall": "^2.1.0",
+    "v-calendar": "2.4.2",
     "vue": "^2.7.10",
     "vue-server-renderer": "^2.7.10",
     "vue-template-compiler": "^2.7.10"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@popperjs/core": "^2.4.0"
+  }
 }
